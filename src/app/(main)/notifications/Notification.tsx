@@ -4,20 +4,31 @@ import { cn } from "@/lib/utils";
 import { NotificationType } from "@prisma/client";
 import { Heart, MessageCircle, User2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 interface NotificationProps {
   notification: NotificationData;
 }
 
 export default function Notification({ notification }: NotificationProps) {
+  const [followed, setFollowed] = useState(false); // State to track if already followed
+
+  // Function to handle following notification
+  const handleFollow = () => {
+    if (!followed) {
+      setFollowed(true);
+    }
+  };
+
   const notificationTypeMap: Record<
     NotificationType,
-    { message: string; icon: JSX.Element; href: string }
+    { message: string; icon: JSX.Element; href: string; onClick?: () => void }
   > = {
     FOLLOW: {
-      message: `${notification.issuer.displayName} followed you`,
+      message: `followed you`, // Simplified message
       icon: <User2 className="size-7 text-primary" />,
       href: `/users/${notification.issuer.username}`,
+      onClick: handleFollow, // Handle following action
     },
     COMMENT: {
       message: `${notification.issuer.displayName} commented on your post`,
@@ -31,10 +42,10 @@ export default function Notification({ notification }: NotificationProps) {
     },
   };
 
-  const { message, icon, href } = notificationTypeMap[notification.type];
+  const { message, icon, href, onClick } = notificationTypeMap[notification.type];
 
   return (
-    <Link href={href} className="block">
+    <Link href={href} className="block" onClick={onClick}>
       <article
         className={cn(
           "flex gap-3 rounded-2xl bg-card p-5 shadow-sm transition-colors hover:bg-card/70",

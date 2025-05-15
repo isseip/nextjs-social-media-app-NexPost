@@ -43,15 +43,9 @@ export default function PostEditor() {
         italic: false,
       }),
       Placeholder.configure({
-        placeholder: "What's in Yor in Mind?",
+        placeholder: "What's in Yor Mind'?",
       }),
     ],
-      editorProps: {
-        attributes: {
-          "data-ssr": "false",
-        },
-      },
-      immediatelyRender: false,
   });
 
   const input =
